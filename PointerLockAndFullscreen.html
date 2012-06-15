@@ -13,7 +13,7 @@
         border: solid black 1px;
         background: yellowgreen;
     }
-    #myCursor {
+    #HTMLCursor {
         border: solid black 1px;
         background: yellow;
         display: inline;
@@ -156,20 +156,20 @@
       };
       updateIsLocked();
 
-      var myCursor = document.getElementById("myCursor");
+      var HTMLCursor = document.getElementById("HTMLCursor");
       var resetPos = document.getElementById("resetPos");
-      function moveMyCursorTo(x, y) {
-        myCursor.style.left = x + "px";;
-        myCursor.style.top = y + "px";
+      function moveHTMLCursorTo(x, y) {
+        HTMLCursor.style.left = x + "px";;
+        HTMLCursor.style.top = y + "px";
       }
-      function moveMyCursorToCenter() {
-        moveMyCursorTo(window.innerWidth / 2, window.innerHeight / 2);
+      function moveHTMLCursorToCenter() {
+        moveHTMLCursorTo(window.innerWidth / 2, window.innerHeight / 2);
       }
-      moveMyCursorToCenter();
-      function moveMyCursorBy(x, y) {
-        moveMyCursorTo(
-            myCursor.getBoundingClientRect().left + parseInt(x),
-            myCursor.getBoundingClientRect().top + parseInt(y));
+      moveHTMLCursorToCenter();
+      function moveHTMLCursorBy(x, y) {
+        moveHTMLCursorTo(
+            HTMLCursor.getBoundingClientRect().left + parseInt(x),
+            HTMLCursor.getBoundingClientRect().top + parseInt(y));
       }
 
       document.addEventListener("click", function (e) { clickAndDblclickHander("click", e); } );
@@ -181,8 +181,8 @@
         //send a synthetic click / dblclick
         ee = document.createEvent("MouseEvents");
         ee._isSynthetic = true;
-        x = myCursor.getBoundingClientRect().left;
-        y = myCursor.getBoundingClientRect().top;
+        x = HTMLCursor.getBoundingClientRect().left;
+        y = HTMLCursor.getBoundingClientRect().top;
         ee.initMouseEvent(clickOrDblclick, true, true, null, 1,
                           x + e.screenX - e.clientX,
                           y + e.screenY - e.clientY,
@@ -208,13 +208,13 @@
             log("MouseEvent doesn't support .movementX/Y, faking it!");
           }
         }
-        moveMyCursorBy(e.movementX, e.movementY);
+        moveHTMLCursorBy(e.movementX, e.movementY);
         displaytext.innerHTML =
           "  document mousemove listener:<br>" +
           "  Raw: " + e.screenX + ", " + e.screenY +
           "  Cursor: "
-          + myCursor.getBoundingClientRect().left + ", "
-          + myCursor.getBoundingClientRect().top +
+          + HTMLCursor.getBoundingClientRect().left + ", "
+          + HTMLCursor.getBoundingClientRect().top +
           "  Movement: " + e.movementX + ", " + e.movementY;
       });
       locktarget1.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
@@ -238,7 +238,7 @@
       });
       document.addEventListener("keypress", function (e) {
         e.preventDefault();
-        moveMyCursorToCenter();
+        moveHTMLCursorToCenter();
         if (e.keyCode == 32) {
 
         }
@@ -271,7 +271,7 @@
       });
 
       resetPos.addEventListener("click", function (e) {
-        moveMyCursorTo(e.clientX, e.clientY);
+        moveHTMLCursorTo(e.clientX, e.clientY);
         displaytext.innerHTML = displaytext.innerHTML + "  mousedown";
       });
 
@@ -319,9 +319,9 @@
       click here!<br>
       dblclick here!
     </div><br>
-    <div id="myCursor">HTMLCursor</div><br>
+    <div id="HTMLCursor">HTMLCursor</div><br>
     <div id="resetPos">
-      Press a key, or Click here to reset myCursor position.
+      Press a key, or Click here to reset HTMLCursor position.
     </div><br>
     <div>
       <a href="#anchor">#anchor</a>
