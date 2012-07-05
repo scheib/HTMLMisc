@@ -86,14 +86,7 @@
     }
     function LockMouse1() {
       log("Trying a lock to locktarget1...");
-      navigator.webkitPointer.lock(document.getElementById("locktarget1"), 
-                                   function(){log("lock success");}, 
-                                   function(){log("lock failed");});
-    }
-    function LockMouse1New() {
-      log("Trying a lock to locktarget1...");
       document.getElementById("locktarget1").webkitRequestPointerLock();
-      // Need to handle a response
     }
     function DelayedLockMouse1() {
       log("Delaying a lock...");
@@ -101,9 +94,7 @@
     }
     function LockMouse2() {
       log("Trying a lock to locktarget2...");
-      navigator.webkitPointer.lock(document.getElementById("locktarget2"), 
-                                   function(){log("lock success");}, 
-                                   function(){log("lock failed");});
+      document.getElementById("locktarget2").webkitRequestPointerLock();
     }
     function SpamLockMouse2() {
       log("Spamming lock requests for target2...");
@@ -130,26 +121,26 @@
     function init() {
       requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
-      document.body.onwebkitpointerlocklost = function () { log("onwebkitpointerlocklost"); }
-      locktarget1.addEventListener("webkitpointerlocklost", function() { log('locktarget1 webkitpointerlocklost'); } );
-      locktarget2.addEventListener("webkitpointerlocklost", function() { log('locktarget2 webkitpointerlocklost'); } );
-      document.body.addEventListener("webkitpointerlocklost", function() { log('document.body webkitpointerlocklost'); } );
-
       document.onwebkitpointerlockchange = function () {
         log("document.onwebkitpointerlockchange to " +
           (document.webkitPointerLockElement ? "locked" : "unlocked") + 
-          ((document.webkitPointerLockElement == locktarget1) ? " target 1" : "") +
-          ((document.webkitPointerLockElement == locktarget2) ? " target 2" : ""));
+          ((document.webkitPointerLockElement == locktarget1) ? " to target 1" : "") +
+          ((document.webkitPointerLockElement == locktarget2) ? " to target 2" : ""));
       }
-      document.onwebkitpointerlockerror = function () { log("document.onwebkitpointerlockerror"); }
+      document.onwebkitpointerlockerror = function () {
+        log("document.onwebkitpointerlockerror. Current element: " +
+          (document.webkitPointerLockElement ? "locked" : "unlocked") + 
+          ((document.webkitPointerLockElement == locktarget1) ? " to target 1" : "") +
+          ((document.webkitPointerLockElement == locktarget2) ? " to target 2" : ""));
+      }
 
       function updateIsLocked () {
         var locked = document.webkitPointerLockElement;
         if (document.getElementById("isLocked").lastLocked != locked) {
-          document.getElementById("isLocked").innerHTML = "pointer.isLocked = " + 
+          document.getElementById("isLocked").innerHTML = "document.webkitPointerLockElement " + 
             (document.webkitPointerLockElement ? "locked" : "unlocked") + 
-            (document.webkitPointerLockElement == locktarget1 ? " target 1" : "") +
-            (document.webkitPointerLockElement == locktarget2 ? " target 2" : "");
+            (document.webkitPointerLockElement == locktarget1 ? " to target 1" : "") +
+            (document.webkitPointerLockElement == locktarget2 ? " to target 2" : "");
           document.getElementById("isLocked").lastLocked = locked;
         }
         requestAnimationFrame(updateIsLocked);
@@ -294,12 +285,10 @@
     <button onclick="ToggleFullscreen(document.getElementById('container'));">Toggle Tab Fullscreen</button>
     <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
     <button onclick="LockMouse1();">Lock Target1</button>
-    <button onclick="LockMouse1New();">Lock Target1New</button>
     <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
     <button onclick="LockMouse2();">Lock Target2</button>
     <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
-    <button onclick="navigator.webkitPointer.unlock();">Unlock Mouse</button>
-    <button onclick="document.webkitExitPointerLock();">Unlock Mouse New</button>
+    <button onclick="document.webkitExitPointerLock();">Unlock Mouse</button>
     <button onclick="console.log(document.webkitPointerLockElement);">document.webkitPointerLockElement</button>
     <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse1();">Toggle Fullscreen & Lock Mouse</button>
     <form name="displaytext">...<br>...</form>
