@@ -82,23 +82,25 @@
     }
     function DelayedFullscreen() {
       log("Delaying a fullscreen...");
-      window.setTimeout(ToggleFullscreen(document.getElementById('container')), 1010);
+      window.setTimeout("ToggleFullscreen(document.getElementById('container'))", 1010); // just over a second causes this to not be detected as a user gesture in WebKit.
     }
-    function LockMouse1() {
-      log("Trying a lock to locktarget1...");
-      document.getElementById("locktarget1").webkitRequestPointerLock();
+    function LockMouse(element) {
+      log("Trying a lock to " + element.id + "...");
+      element.requestPointerLock = element.requestPointerLock ||
+                                   element.webkitRequestPointerLock ||
+                                   element.mozRequestPointerLock ||
+                                   element.oRequestPointerLock ||
+                                   element.msRequestPointerLock;
+      console.log(element.requestPointerLock);
+      element.requestPointerLock();
     }
     function DelayedLockMouse1() {
       log("Delaying a lock...");
-      window.setTimeout(LockMouse1, 1010);
-    }
-    function LockMouse2() {
-      log("Trying a lock to locktarget2...");
-      document.getElementById("locktarget2").webkitRequestPointerLock();
+      window.setTimeout("LockMouse(locktarget1)", 1010); // just over a second causes this to not be detected as a user gesture in WebKit.
     }
     function SpamLockMouse2() {
       log("Spamming lock requests for target2...");
-      window.setInterval(LockMouse2, 111);
+      window.setInterval("LockMouse(locktarget2)", 111);
     }
 
     function log(x) {
@@ -284,21 +286,27 @@
   <div id="container">
     <button onclick="ToggleFullscreen(document.getElementById('container'));">Toggle Tab Fullscreen</button>
     <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
-    <button onclick="LockMouse1();">Lock Target1</button>
     <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
-    <button onclick="LockMouse2();">Lock Target2</button>
     <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
     <button onclick="document.webkitExitPointerLock();">Unlock Mouse</button>
     <button onclick="console.log(document.webkitPointerLockElement);">document.webkitPointerLockElement</button>
-    <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse1();">Toggle Fullscreen & Lock Mouse</button>
+    <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Mouse</button>
     <form name="displaytext">...<br>...</form>
     <div id="locktarget1" class="locktarget">
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Fullscreen Other Target</button>
+      Target 1
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Fullscreen Target1</button>
+      <button onclick="LockMouse(locktarget1);">Pointer Lock Target1</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1')); LockMouse(locktarget1);">Fullscreen & Lock Mouse Target1</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Fullscreen Target2</button>
       <div>Lock Target Movement:</div>
       <div>...</div>
     </div><br>
     <div id="locktarget2" class="locktarget">
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Fullscreen Other Target</button>
+      Target 2
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Fullscreen Target2</button>
+      <button onclick="LockMouse(locktarget2);">Pointer Lock Target2</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2')); LockMouse(locktarget2);">Fullscreen & Lock Mouse Target2</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Fullscreen Target1</button>
       <div>Lock Target Movement:</div>
       <div>...</div>
     </div><br>
