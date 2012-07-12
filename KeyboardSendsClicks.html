@@ -16,6 +16,16 @@ function init() {
   adddiv();
   adddiv();
 
+  function createMouseEvent(typeString, oldMouseEventTemplate) {
+    var e = document.createEvent("MouseEvents");
+    e.initMouseEvent(typeString, true, true, null, 1,
+                      oldMouseEventTemplate.screenX,
+                      oldMouseEventTemplate.screenY,
+                      oldMouseEventTemplate.clientX,
+                      oldMouseEventTemplate.clientY,
+                      false, false, false, false, 0, null);
+    return e;
+  };
   keyStore = {};
   document.body.onmousemove = function mousemove(e) { lastMouse = e; };
   document.body.onkeydown = function keydown(e) {
@@ -26,23 +36,24 @@ function init() {
     } else if (keyStore.hasOwnProperty(e.keyIdentifier)) {
       cachedEvent = keyStore[e.keyIdentifier];
       //send a synthetic click
-      ee = document.createEvent("MouseEvents");
-      ee._isSynthetic = true;
-      ee.initMouseEvent("click", true, true, null, 1,
-                        cachedEvent.screenX,
-                        cachedEvent.screenY,
-                        cachedEvent.clientX,
-                        cachedEvent.clientY,
-                        false, false, false, false, 0, null);
+      emousedown = createMouseEvent("mousedown", cachedEvent);
+      emouseup = createMouseEvent("mouseup", cachedEvent);
+      eclick = createMouseEvent("click", cachedEvent);
       var target = document.elementFromPoint(cachedEvent.clientX,
                                              cachedEvent.clientY)
-      console.log("Sending a click");
-      if (target)
-        target.dispatchEvent(ee)
-        e.preventDefault();
+      console.log("Sending mousedown, mouseup, click, to ", target);
+      if (target) {
+        target.dispatchEvent(emousedown);
+        target.dispatchEvent(emouseup);
+        target.dispatchEvent(eclick);
+      }
+      e.preventDefault();
     }
   };
 }
 </script>
 <body onload=init();>
+Hover the mouse over a location you will send a click.
+Press CTRL and then any key.
+Move the mouse away, then press that key again to replay the click.
 
