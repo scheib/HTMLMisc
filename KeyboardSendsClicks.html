@@ -1,7 +1,6 @@
 <html>
 <script>
 function clicked(e) {
-  console.log(345);
   this.style.backgroundColor="#" + Math.random().toString(16).slice(2, 8);
   e.stopPropagation();
 }
@@ -13,6 +12,10 @@ function adddiv() {
 }
 
 function init() {
+  adddiv();
+  adddiv();
+  adddiv();
+
   keyStore = {};
   document.body.onmousemove = function mousemove(e) { lastMouse = e; };
   document.body.onkeydown = function keydown(e) {
@@ -39,9 +42,6 @@ function init() {
         e.preventDefault();
     }
   };
-  adddiv();
-  adddiv();
-  adddiv();
 }
 </script>
 <body onload=init();>
