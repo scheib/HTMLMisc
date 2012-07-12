@@ -1,0 +1,48 @@
+<html>
+<script>
+function clicked(e) {
+  console.log(345);
+  this.style.backgroundColor="#" + Math.random().toString(16).slice(2, 8);
+  e.stopPropagation();
+}
+
+function adddiv() {
+  var d = document.body.appendChild(document.createElement("div"));
+  d.innerText = "hey";
+  d.onclick = clicked;
+}
+
+function init() {
+  keyStore = {};
+  document.body.onmousemove = function mousemove(e) { lastMouse = e; };
+  document.body.onkeydown = function keydown(e) {
+    if (e.ctrlKey) {
+      console.log("Storing a key " + e.keyCode + " " + e.keyIdentifier);
+      keyStore[e.keyIdentifier] = lastMouse;
+      e.preventDefault();
+    } else if (keyStore.hasOwnProperty(e.keyIdentifier)) {
+      cachedEvent = keyStore[e.keyIdentifier];
+      //send a synthetic click
+      ee = document.createEvent("MouseEvents");
+      ee._isSynthetic = true;
+      ee.initMouseEvent("click", true, true, null, 1,
+                        cachedEvent.screenX,
+                        cachedEvent.screenY,
+                        cachedEvent.clientX,
+                        cachedEvent.clientY,
+                        false, false, false, false, 0, null);
+      var target = document.elementFromPoint(cachedEvent.clientX,
+                                             cachedEvent.clientY)
+      console.log("Sending a click");
+      if (target)
+        target.dispatchEvent(ee)
+        e.preventDefault();
+    }
+  };
+  adddiv();
+  adddiv();
+  adddiv();
+}
+</script>
+<body onload=init();>
+
