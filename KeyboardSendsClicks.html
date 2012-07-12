@@ -18,7 +18,7 @@ function init() {
 
   function createMouseEvent(typeString, oldMouseEventTemplate) {
     var e = document.createEvent("MouseEvents");
-    e.initMouseEvent(typeString, true, true, null, 1,
+    e.initMouseEvent(typeString, true, true, window, 1,
                       oldMouseEventTemplate.screenX,
                       oldMouseEventTemplate.screenY,
                       oldMouseEventTemplate.clientX,
