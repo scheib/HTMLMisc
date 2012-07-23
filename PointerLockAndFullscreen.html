@@ -278,6 +278,10 @@
                              document.oFullScreenElement ||
                              document.msFullScreenElement;
       console.log("document.fullscreenElement = " + currentFSElement);
+
+      // Color background when we are the iframe.
+      if (window.top !== window)
+        document.getElementById('container').style.backgroundColor="tan";
   }
   </script>
 </head>
@@ -322,8 +326,10 @@
     <div>
       <a href="#anchor">#anchor</a>
       <a href="PointerLockAndFullscreen.html">PointerLockAndFullscreen.html</a>
+      <a href="http://scheib.net">scheib.net</a>
     </div><br>
     <form name="logoutput">Log:</form>
+    <iframe src="PointerLockAndFullscreen.html" webkitallowfullscreen></iframe>
   </div>
 </body>
 </html>
