@@ -41,31 +41,7 @@
 
   <script type="text/javascript">
 
-    function ToggleFullscreen(element) {
-      var currentFSElement = document.fullscreenElement ||
-                             document.webkitFullscreenElement ||
-                             document.mozFullscreenElement ||
-                             document.oFullscreenElement ||
-                             document.msFullscreenElement ||
-                             document.fullScreenElement ||
-                             document.webkitFullScreenElement ||
-                             document.mozFullScreenElement ||
-                             document.oFullScreenElement ||
-                             document.msFullScreenElement;
-      if (currentFSElement === element) {
-        console.log("exitFullscreen()")
-        var exitFullscreen = document.exitFullscreen ||
-                             document.webkitExitFullscreen ||
-                             document.mozExitFullscreen ||
-                             document.oExitFullscreen ||
-                             document.msExitFullscreen ||
-                             document.cancelFullScreen ||
-                             document.webkitCancelFullScreen ||
-                             document.mozCancelFullScreen ||
-                             document.oCancelFullScreen ||
-                             document.msCancelFullScreen;
-        exitFullscreen.call(document);
-      } else {
+    function RequestFullscreen(element) {
         console.log("requestFullscreen()")
         var requestFullscreen = element.requestFullscreen ||
                                 element.webkitRequestFullscreen ||
@@ -78,7 +54,36 @@
                                 element.oRequestFullScreen ||
                                 element.msRequestFullScreen;
         requestFullscreen.call(element);
-      }
+    }
+    function ExitFullscreen() {
+        console.log("exitFullscreen()")
+        var exitFullscreen = document.exitFullscreen ||
+                             document.webkitExitFullscreen ||
+                             document.mozExitFullscreen ||
+                             document.oExitFullscreen ||
+                             document.msExitFullscreen ||
+                             document.cancelFullScreen ||
+                             document.webkitCancelFullScreen ||
+                             document.mozCancelFullScreen ||
+                             document.oCancelFullScreen ||
+                             document.msCancelFullScreen;
+        exitFullscreen.call(document);
+    }
+    function ToggleFullscreen(element) {
+      var currentFSElement = document.fullscreenElement ||
+                             document.webkitFullscreenElement ||
+                             document.mozFullscreenElement ||
+                             document.oFullscreenElement ||
+                             document.msFullscreenElement ||
+                             document.fullScreenElement ||
+                             document.webkitFullScreenElement ||
+                             document.mozFullScreenElement ||
+                             document.oFullScreenElement ||
+                             document.msFullScreenElement;
+      if (currentFSElement === element)
+          ExitFullscreen();
+      else
+          RequestFullscreen(element);
     }
     function DelayedFullscreen() {
       log("Delaying a fullscreen...");
@@ -292,25 +297,25 @@
     <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
     <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
     <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
-    <button onclick="document.webkitExitPointerLock();">Unlock Mouse</button>
+    <button onclick="document.webkitExitPointerLock();">Unlock Pointer</button>
     <button onclick="console.log(document.webkitPointerLockElement);">document.webkitPointerLockElement</button>
-    <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Mouse</button>
+    <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Pointer</button>
     <form name="displaytext">...<br>...</form>
     <div id="locktarget1" class="locktarget">
       Target 1
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Fullscreen Target1</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Toggle Target1 Fullscreen</button>
       <button onclick="LockMouse(locktarget1);">Pointer Lock Target1</button>
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget1')); LockMouse(locktarget1);">Fullscreen & Lock Mouse Target1</button>
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Fullscreen Target2</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1')); LockMouse(locktarget1);">Fullscreen & Lock Pointer Target1</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Toggle Target2 Fullscreen</button>
       <div>Lock Target Movement:</div>
       <div>...</div>
     </div><br>
     <div id="locktarget2" class="locktarget">
       Target 2
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Fullscreen Target2</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Toggle Target2 Fullscreen</button>
       <button onclick="LockMouse(locktarget2);">Pointer Lock Target2</button>
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget2')); LockMouse(locktarget2);">Fullscreen & Lock Mouse Target2</button>
-      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Fullscreen Target1</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2')); LockMouse(locktarget2);">Fullscreen & Lock Pointer Target2</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Toggle Target1 Fullscreen</button>
       <div>Lock Target Movement:</div>
       <div>...</div>
     </div><br>
