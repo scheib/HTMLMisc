@@ -18,6 +18,12 @@
 <div id="keyLog"></div>
 <script type="text/javascript">
 var keyStateDict = {};
+function updateInnerHTML(idToUpdate, description)
+{
+  var cell = document.getElementById(idToUpdate);
+  cell.innerHTML = description;
+
+}
 function displayKeyState()
 {
   var s = document.getElementById("keyStateDisplay");
@@ -64,26 +70,24 @@ function GetDescriptionFor(e)
 function MonitorKeyDown(e)
 {
   if (!e) e=window.event;
-  var cell = document.getElementById("td-keydown");
   d = GetDescriptionFor(e);
-  cell.innerHTML = d;
+  updateInnerHTML("td-keydown", d);
   updateKeyState(e, d + " == DOWN");
   return false;
 }
 function MonitorKeyUp(e)
 {
   if (!e) e=window.event;
-  var cell = document.getElementById("td-keyup");
   d = GetDescriptionFor(e);
-  cell.innerHTML = d;
+  updateInnerHTML("td-keyup", d);
   updateKeyState(e, d + " == up");
   return false;
 }
 function MonitorKeyPress(e)
 {
   if (!e) e=window.event;
-  var cell = document.getElementById("td-keypress");
-  cell.innerHTML = GetDescriptionFor(e);
+  d = GetDescriptionFor(e);
+  updateInnerHTML("td-keypress", d);
   return false;
 }
 
