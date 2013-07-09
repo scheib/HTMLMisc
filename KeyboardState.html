@@ -100,9 +100,19 @@ function MonitorKeyPress(e)
   logEvent(d + " == press");
   return false;
 }
+function MonitorBlur()
+{
+  logEvent("blur");
+}
+function MonitorFocus()
+{
+  logEvent("focus");
+}
 
 document.onkeydown = MonitorKeyDown;
 document.onkeyup = MonitorKeyUp;
 document.onkeypress = MonitorKeyPress;
+document.body.onblur = MonitorBlur;
+document.body.onfocus = MonitorFocus;
 </script>
 </body></html>
