@@ -102,6 +102,12 @@ function MonitorKeyPress(e)
 }
 function MonitorBlur()
 {
+  for (key in keyStateDict)
+  {
+    if (keyStateDict[key].indexOf("blurred") < 0)
+      keyStateDict[key] += "; when document blurred"
+  }
+  displayKeyState();
   logEvent("blur");
 }
 function MonitorFocus()
