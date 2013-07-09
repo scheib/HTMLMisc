@@ -37,6 +37,13 @@ function updateKeyState(event, description)
   keyStateDict[GetCodeFor(event)] = description;
   displayKeyState();
 }
+function logEvent(description)
+{
+  var logDiv = document.getElementById("keyLog");
+  var entry = document.createElement("div");
+  entry.innerText = description;
+  logDiv.insertBefore(entry, logDiv.firstChild)
+}
 function GetCodeFor(e)
 {
   if ((e.charCode) && (e.keyCode==0))
@@ -73,6 +80,7 @@ function MonitorKeyDown(e)
   d = GetDescriptionFor(e);
   updateInnerHTML("td-keydown", d);
   updateKeyState(e, d + " == DOWN");
+  logEvent(d + " == down");
   return false;
 }
 function MonitorKeyUp(e)
@@ -81,6 +89,7 @@ function MonitorKeyUp(e)
   d = GetDescriptionFor(e);
   updateInnerHTML("td-keyup", d);
   updateKeyState(e, d + " == up");
+  logEvent(d + " == up");
   return false;
 }
 function MonitorKeyPress(e)
@@ -88,6 +97,7 @@ function MonitorKeyPress(e)
   if (!e) e=window.event;
   d = GetDescriptionFor(e);
   updateInnerHTML("td-keypress", d);
+  logEvent(d + " == press");
   return false;
 }
 
