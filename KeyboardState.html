@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Simple keyboard state handler, Vincent Scheib. -->
 <!-- Adapted from http://www.cryer.co.uk/resources/javascript/script20_respond_to_keypress.htm -->
-<html><body> 
+<html><body>
 <table border="1" cellspacing="0">
   <tbody><tr>
     <th>KeyDown</th>
@@ -15,15 +15,21 @@
   </tr>
 </tbody></table>
 <pre id="keyStateDisplay">No key events captured yet.</pre>
+<div id="keyLog"></div>
 <script type="text/javascript">
 var keyStateDict = {};
-function displayKeyState() 
+function displayKeyState()
 {
   var s = document.getElementById("keyStateDisplay");
   var ss = JSON.stringify(keyStateDict);
   var re = new RegExp("[,{}] *", "g");
   ss = ss.replace(re, "\n");
   s.innerHTML = ss;
+}
+function updateKeyState(event, description)
+{
+  keyStateDict[GetCodeFor(event)] = description;
+  displayKeyState();
 }
 function GetCodeFor(e)
 {
@@ -52,7 +58,7 @@ function GetDescriptionFor(e)
   if (e.shiftKey) result += " shift";
   if (e.ctrlKey) result += " ctrl";
   if (e.altKey) result += " alt";
-  
+
   return result;
 }
 function MonitorKeyDown(e)
@@ -61,8 +67,7 @@ function MonitorKeyDown(e)
   var cell = document.getElementById("td-keydown");
   d = GetDescriptionFor(e);
   cell.innerHTML = d;
-  keyStateDict[GetCodeFor(e)] = d + " == DOWN";
-  displayKeyState();
+  updateKeyState(e, d + " == DOWN");
   return false;
 }
 function MonitorKeyUp(e)
@@ -71,8 +76,7 @@ function MonitorKeyUp(e)
   var cell = document.getElementById("td-keyup");
   d = GetDescriptionFor(e);
   cell.innerHTML = d;
-  keyStateDict[GetCodeFor(e)] = d + " == up";
-  displayKeyState();
+  updateKeyState(e, d + " == up");
   return false;
 }
 function MonitorKeyPress(e)
