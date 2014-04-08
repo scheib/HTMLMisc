@@ -40,7 +40,7 @@
   </style>
 
   <script type="text/javascript">
-
+    documentMouseMoveCallCounter = 0;
     function RequestFullscreen(element) {
         console.log("requestFullscreen()")
         var requestFullscreen = element.requestFullscreen ||
@@ -130,13 +130,13 @@
 
       document.onwebkitpointerlockchange = function () {
         log("document.onwebkitpointerlockchange to " +
-          (document.webkitPointerLockElement ? "locked" : "unlocked") + 
+          (document.webkitPointerLockElement ? "locked" : "unlocked") +
           ((document.webkitPointerLockElement == locktarget1) ? " to target 1" : "") +
           ((document.webkitPointerLockElement == locktarget2) ? " to target 2" : ""));
       }
       document.onwebkitpointerlockerror = function () {
         log("document.onwebkitpointerlockerror. Current element: " +
-          (document.webkitPointerLockElement ? "locked" : "unlocked") + 
+          (document.webkitPointerLockElement ? "locked" : "unlocked") +
           ((document.webkitPointerLockElement == locktarget1) ? " to target 1" : "") +
           ((document.webkitPointerLockElement == locktarget2) ? " to target 2" : ""));
       }
@@ -144,8 +144,8 @@
       function updateIsLocked () {
         var locked = document.webkitPointerLockElement;
         if (document.getElementById("isLocked").lastLocked != locked) {
-          document.getElementById("isLocked").innerHTML = "document.webkitPointerLockElement " + 
-            (document.webkitPointerLockElement ? "locked" : "unlocked") + 
+          document.getElementById("isLocked").innerHTML = "document.webkitPointerLockElement " +
+            (document.webkitPointerLockElement ? "locked" : "unlocked") +
             (document.webkitPointerLockElement == locktarget1 ? " to target 1" : "") +
             (document.webkitPointerLockElement == locktarget2 ? " to target 2" : "");
           document.getElementById("isLocked").lastLocked = locked;
@@ -207,13 +207,15 @@
           }
         }
         moveHTMLCursorBy(e.movementX, e.movementY);
+        documentMouseMoveCallCounter++;
         displaytext.innerHTML =
           "  document mousemove listener:<br>" +
           "  Raw: " + e.screenX + ", " + e.screenY +
           "  Cursor: "
           + HTMLCursor.getBoundingClientRect().left + ", "
           + HTMLCursor.getBoundingClientRect().top +
-          "  Movement: " + e.movementX + ", " + e.movementY;
+          "  Movement: " + e.movementX + ", " + e.movementY +
+          ", calls: " + documentMouseMoveCallCounter;
       });
       locktarget1.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
       locktarget1.addEventListener("mousemove", function (e) {
