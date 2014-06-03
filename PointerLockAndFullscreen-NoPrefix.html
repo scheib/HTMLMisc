@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html><head>
+  <style type="text/css">
+    body {
+        background: grey;
+        -webkit-user-select: none;
+    }
+    #container {
+        border: solid black 1px;
+        background: white;
+    }
+    #clicktarget {
+        border: solid black 1px;
+        background: yellowgreen;
+    }
+    #HTMLCursor {
+        border: solid black 1px;
+        background: yellow;
+        display: inline;
+        position: absolute;
+        pointer-events: none;
+        z-index: 1;
+    }
+    #resetPos {
+        border: solid black 1px;
+        background: pink;
+        display: inline;
+        position: relative;
+    }
+    .locktarget {
+        border: solid black 1px;
+        background: lightgrey;
+    }
+    #locktarget1 {
+        border: solid red 1px;
+    }
+    #locktarget2 {
+        border: solid green 1px;
+    }
+  </style>
+
+  <script type="text/javascript">
+    documentMouseMoveCallCounter = 0;
+    function RequestFullscreen(element) {
+        console.log("requestFullscreen()")
+        var requestFullscreen = element.requestFullscreen ||
+                                element.webkitRequestFullscreen ||
+                                element.mozRequestFullscreen ||
+                                element.oRequestFullscreen ||
+                                element.msRequestFullscreen ||
+                                element.requestFullScreen ||
+                                element.webkitRequestFullScreen ||
+                                element.mozRequestFullScreen ||
+                                element.oRequestFullScreen ||
+                                element.msRequestFullScreen;
+        requestFullscreen.call(element);
+    }
+    function ExitFullscreen() {
+        console.log("exitFullscreen()")
+        var exitFullscreen = document.exitFullscreen ||
+                             document.webkitExitFullscreen ||
+                             document.mozExitFullscreen ||
+                             document.oExitFullscreen ||
+                             document.msExitFullscreen ||
+                             document.cancelFullScreen ||
+                             document.webkitCancelFullScreen ||
+                             document.mozCancelFullScreen ||
+                             document.oCancelFullScreen ||
+                             document.msCancelFullScreen;
+        exitFullscreen.call(document);
+    }
+    function ToggleFullscreen(element) {
+      var currentFSElement = document.fullscreenElement ||
+                             document.webkitFullscreenElement ||
+                             document.mozFullscreenElement ||
+                             document.oFullscreenElement ||
+                             document.msFullscreenElement ||
+                             document.fullScreenElement ||
+                             document.webkitFullScreenElement ||
+                             document.mozFullScreenElement ||
+                             document.oFullScreenElement ||
+                             document.msFullScreenElement;
+      if (currentFSElement === element)
+          ExitFullscreen();
+      else
+          RequestFullscreen(element);
+    }
+    function DelayedFullscreen() {
+      log("Delaying a fullscreen...");
+      window.setTimeout("ToggleFullscreen(document.getElementById('container'))", 1010); // just over a second causes this to not be detected as a user gesture in WebKit.
+    }
+    function LockMouse(element) {
+      log("Trying a lock to " + element.id + "...");
+      element.requestPointerLock = element.requestPointerLock ||
+                                   element.mozRequestPointerLock ||
+                                   element.oRequestPointerLock ||
+                                   element.msRequestPointerLock;
+      console.log(element.requestPointerLock);
+      element.requestPointerLock();
+    }
+    function ToggleMouseLock(element) {
+      if (document.pointerLockElement) {
+        document.exitPointerLock();
+      } else {
+        LockMouse(element)
+      }
+    }
+    function DelayedLockMouse1() {
+      log("Delaying a lock...");
+      window.setTimeout("LockMouse(locktarget1)", 1010); // just over a second causes this to not be detected as a user gesture in WebKit.
+    }
+    function SpamLockMouse2() {
+      log("Spamming lock requests for target2...");
+      window.setInterval("LockMouse(locktarget2)", 111);
+    }
+
+    function log(x) {
+      logoutput.insertAdjacentHTML("beforeEnd", "<div>" + x + "</div>");
+    }
+
+    var polyFillMouseEventMovementFromVenderPrefix = function (e) {
+      e.movementX = (e.movementX !== undefined ? e.movementX :
+                    (e.mozMovementX !== undefined ? e.mozMovementX :
+                    (e.oMovementX !== undefined ? e.oMovementX :
+                     e.msMovementY)));
+      e.movementY = (e.movementY !== undefined ? e.movementY :
+                    (e.mozMovementY !== undefined ? e.mozMovementY :
+                    (e.oMovementY !== undefined ? e.oMovementY :
+                     e.msMovementY)));
+    }
+
+    function init() {
+      document.onpointerlockchange = function () {
+        log("document.onpointerlockchange to " +
+          (document.pointerLockElement ? "locked" : "unlocked") +
+          ((document.pointerLockElement == locktarget1) ? " to target 1" : "") +
+          ((document.pointerLockElement == locktarget2) ? " to target 2" : ""));
+      }
+      document.onpointerlockerror = function () {
+        log("document.onpointerlockerror. Current element: " +
+          (document.pointerLockElement ? "locked" : "unlocked") +
+          ((document.pointerLockElement == locktarget1) ? " to target 1" : "") +
+          ((document.pointerLockElement == locktarget2) ? " to target 2" : ""));
+      }
+
+      function updateIsLocked () {
+        var locked = document.pointerLockElement;
+        if (document.getElementById("isLocked").lastLocked != locked) {
+          document.getElementById("isLocked").innerHTML = "document.pointerLockElement " +
+            (document.pointerLockElement ? "locked" : "unlocked") +
+            (document.pointerLockElement == locktarget1 ? " to target 1" : "") +
+            (document.pointerLockElement == locktarget2 ? " to target 2" : "");
+          document.getElementById("isLocked").lastLocked = locked;
+        }
+        requestAnimationFrame(updateIsLocked);
+      };
+      updateIsLocked();
+
+      var HTMLCursor = document.getElementById("HTMLCursor");
+      var resetPos = document.getElementById("resetPos");
+      function moveHTMLCursorTo(x, y) {
+        HTMLCursor.style.left = x + "px";;
+        HTMLCursor.style.top = y + "px";
+      }
+      function moveHTMLCursorToCenter() {
+        moveHTMLCursorTo(window.innerWidth / 2, window.innerHeight / 2);
+      }
+      moveHTMLCursorToCenter();
+      function moveHTMLCursorBy(x, y) {
+        moveHTMLCursorTo(
+            HTMLCursor.getBoundingClientRect().left + parseInt(x),
+            HTMLCursor.getBoundingClientRect().top + parseInt(y));
+      }
+
+      document.addEventListener("click", function (e) { clickAndDblclickHander("click", e); } );
+      document.addEventListener("dblclick", function (e) { clickAndDblclickHander("dblclick", e); } );
+      function clickAndDblclickHander(clickOrDblclick, e) {
+        if (e._isSynthetic)
+          return;
+
+        //send a synthetic click / dblclick
+        ee = document.createEvent("MouseEvents");
+        ee._isSynthetic = true;
+        x = HTMLCursor.getBoundingClientRect().left;
+        y = HTMLCursor.getBoundingClientRect().top;
+        ee.initMouseEvent(clickOrDblclick, true, true, null, 1,
+                          x + e.screenX - e.clientX,
+                          y + e.screenY - e.clientY,
+                          x,
+                          y);
+        var target = document.elementFromPoint(x, y)
+        if (target)
+          target.dispatchEvent(ee)
+      };
+
+      var fake_movement_lastx = -1;
+      var fake_movement_lasty = -1;
+      var fake_movement_loggged = false;
+      document.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
+      document.addEventListener("mousemove", function (e) {
+        if (e.movementX === undefined) {
+          e.movementX = e.screenX - fake_movement_lastx;
+          e.movementY = e.screenY - fake_movement_lasty;
+          fake_movement_lastx = e.screenX;
+          fake_movement_lasty = e.screenY;
+          if (!fake_movement_loggged) {
+            fake_movement_loggged = true;
+            log("MouseEvent doesn't support .movementX/Y, faking it!");
+          }
+        }
+        moveHTMLCursorBy(e.movementX, e.movementY);
+        documentMouseMoveCallCounter++;
+        displaytext.innerHTML =
+          "  document mousemove listener:<br>" +
+          "  Raw: " + e.screenX + ", " + e.screenY +
+          "  Cursor: "
+          + HTMLCursor.getBoundingClientRect().left + ", "
+          + HTMLCursor.getBoundingClientRect().top +
+          "  Movement: " + e.movementX + ", " + e.movementY +
+          ", calls: " + documentMouseMoveCallCounter;
+      });
+      locktarget1.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
+      locktarget1.addEventListener("mousemove", function (e) {
+        locktarget1.lastElementChild.innerHTML =
+          "  Raw: " + e.screenX + ", " + e.screenY +
+          "  Movement: " + e.movementX + ", " + e.movementY;
+      });
+      locktarget2.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
+      locktarget2.addEventListener("mousemove", function (e) {
+        locktarget2.lastElementChild.innerHTML =
+          "  Raw: " + e.screenX + ", " + e.screenY +
+          "  Movement: " + e.movementX + ", " + e.movementY;
+      });
+      document.addEventListener("mouseover", polyFillMouseEventMovementFromVenderPrefix);
+      document.addEventListener("mouseover", function (e) {
+        if (e.movementX === undefined) {
+          fake_movement_lastx = e.screenX;
+          fake_movement_lasty = e.screenY;
+        }
+      });
+      document.addEventListener("keypress", function (e) {
+        if (e.keyCode != 116) {
+          e.preventDefault();
+          moveHTMLCursorToCenter();
+        }
+      });
+
+      var clicktarget = document.getElementById("clicktarget");
+      clicktarget._clicks1 = 0;
+      clicktarget._clicks2 = 0;
+      clicktarget._dblclicks1 = 0;
+      clicktarget._dblclicks2 = 0;
+      clicktarget.updateText = function () {
+        clicktarget.innerHTML = "I've been clicked " + clicktarget._clicks1 +
+          " real times and " + clicktarget._clicks2 + " sythetic times.<br>" +
+          "I've been dblclicked " + clicktarget._dblclicks1 +
+          " real times and " + clicktarget._dblclicks2 + " sythetic times.<br>";
+      }
+      clicktarget.addEventListener("click", function (e) {
+        if (e._isSynthetic)
+          clicktarget._clicks2 += 1;
+        else
+          clicktarget._clicks1 += 1;
+        clicktarget.updateText();
+      });
+      clicktarget.addEventListener("dblclick", function (e) {
+        if (e._isSynthetic)
+          clicktarget._dblclicks2 += 1;
+        else
+          clicktarget._dblclicks1 += 1;
+        clicktarget.updateText();
+      });
+
+      resetPos.addEventListener("click", function (e) {
+        moveHTMLCursorTo(e.clientX, e.clientY);
+        displaytext.innerHTML = displaytext.innerHTML + "  mousedown";
+      });
+
+      var currentFSElement = document.fullscreenElement ||
+                             document.webkitFullscreenElement ||
+                             document.mozFullscreenElement ||
+                             document.oFullscreenElement ||
+                             document.msFullscreenElement ||
+                             document.fullScreenElement ||
+                             document.webkitFullScreenElement ||
+                             document.mozFullScreenElement ||
+                             document.oFullScreenElement ||
+                             document.msFullScreenElement;
+      console.log("document.fullscreenElement = " + currentFSElement);
+
+      // Color background when we are the iframe.
+      if (window.top !== window)
+        document.getElementById('container').style.backgroundColor="tan";
+  }
+  </script>
+</head>
+
+<body onload="init()" title="This tooltip should not be shown if the mouse is locked.">
+  <div id="container">
+    <button onclick="ToggleFullscreen(document.getElementById('container'));">Toggle Tab Fullscreen</button>
+    <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
+    <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
+    <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
+    <button onclick="document.exitPointerLock();">Unlock Pointer</button>
+    <button onclick="console.log(document.pointerLockElement);">document.pointerLockElement</button>
+    <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Pointer</button>
+    <button onclick="RequestFullscreen(document.getElementById('container')); ExitFullscreen();">Request+Exit Fullscreen</button>
+    <button onclick="ExitFullscreen(); RequestFullscreen(document.getElementById('container')); ">Exit+Request Fullscreen</button>
+    <form name="displaytext">...<br>...</form>
+    <div id="locktarget1" class="locktarget">
+      Target 1
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Toggle Target1 Fullscreen</button>
+      <button onclick="ToggleMouseLock(locktarget1);">Toggle Pointer Lock Target1</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1')); LockMouse(locktarget1);">Fullscreen & Lock Pointer Target1</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Toggle Target2 Fullscreen</button>
+      <div>Lock Target Movement:</div>
+      <div>...</div>
+    </div><br>
+    <div id="locktarget2" class="locktarget">
+      Target 2
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2'));">Toggle Target2 Fullscreen</button>
+      <button onclick="ToggleMouseLock(locktarget2);">Toggle Pointer Lock Target2</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget2')); LockMouse(locktarget2);">Fullscreen & Lock Pointer Target2</button>
+      <button onclick="ToggleFullscreen(document.getElementById('locktarget1'));">Toggle Target1 Fullscreen</button>
+      <div>Lock Target Movement:</div>
+      <div>...</div>
+    </div><br>
+    <div id="isLocked">...</div>
+    <div id="clicktarget">
+      click here!<br>
+      dblclick here!
+    </div><br>
+    <div id="HTMLCursor">HTMLCursor</div><br>
+    <div id="resetPos">
+      Press a key, or Click here to reset HTMLCursor position.
+    </div><br>
+    <div>
+      <a href="#anchor">#anchor</a>
+      <a href="PointerLockAndFullscreen.html">PointerLockAndFullscreen.html</a>
+      <a href="http://scheib.net">scheib.net</a>
+      <button onclick="history.pushState(null, null, 'pushState')">history.pushState</button>
+    </div><br>
+    <form name="logoutput">Log:</form>
+    <iframe src="PointerLockAndFullscreen.html" webkitallowfullscreen></iframe>
+  </div>
+</body>
+</html>
+
