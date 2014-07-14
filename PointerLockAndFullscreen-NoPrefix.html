@@ -43,38 +43,14 @@
     documentMouseMoveCallCounter = 0;
     function RequestFullscreen(element) {
         console.log("requestFullscreen()")
-        var requestFullscreen = element.requestFullscreen ||
-                                element.mozRequestFullscreen ||
-                                element.oRequestFullscreen ||
-                                element.msRequestFullscreen ||
-                                element.requestFullScreen ||
-                                element.mozRequestFullScreen ||
-                                element.oRequestFullScreen ||
-                                element.msRequestFullScreen;
-        requestFullscreen.call(element);
+        element.requestFullscreen();
     }
     function ExitFullscreen() {
         console.log("exitFullscreen()")
-        var exitFullscreen = document.exitFullscreen ||
-                             document.mozExitFullscreen ||
-                             document.oExitFullscreen ||
-                             document.msExitFullscreen ||
-                             document.cancelFullScreen ||
-                             document.mozCancelFullScreen ||
-                             document.oCancelFullScreen ||
-                             document.msCancelFullScreen;
-        exitFullscreen.call(document);
+        document.exitFullscreen();
     }
     function ToggleFullscreen(element) {
-      var currentFSElement = document.fullscreenElement ||
-                             document.mozFullscreenElement ||
-                             document.oFullscreenElement ||
-                             document.msFullscreenElement ||
-                             document.fullScreenElement ||
-                             document.mozFullScreenElement ||
-                             document.oFullScreenElement ||
-                             document.msFullScreenElement;
-      if (currentFSElement === element)
+      if (document.fullscreenElement === element)
           ExitFullscreen();
       else
           RequestFullscreen(element);
@@ -85,11 +61,6 @@
     }
     function LockMouse(element) {
       log("Trying a lock to " + element.id + "...");
-      element.requestPointerLock = element.requestPointerLock ||
-                                   element.mozRequestPointerLock ||
-                                   element.oRequestPointerLock ||
-                                   element.msRequestPointerLock;
-      console.log(element.requestPointerLock);
       element.requestPointerLock();
     }
     function ToggleMouseLock(element) {
@@ -110,17 +81,6 @@
 
     function log(x) {
       logoutput.insertAdjacentHTML("beforeEnd", "<div>" + x + "</div>");
-    }
-
-    var polyFillMouseEventMovementFromVenderPrefix = function (e) {
-      e.movementX = (e.movementX !== undefined ? e.movementX :
-                    (e.mozMovementX !== undefined ? e.mozMovementX :
-                    (e.oMovementX !== undefined ? e.oMovementX :
-                     e.msMovementY)));
-      e.movementY = (e.movementY !== undefined ? e.movementY :
-                    (e.mozMovementY !== undefined ? e.mozMovementY :
-                    (e.oMovementY !== undefined ? e.oMovementY :
-                     e.msMovementY)));
     }
 
     function init() {
@@ -190,7 +150,6 @@
       var fake_movement_lastx = -1;
       var fake_movement_lasty = -1;
       var fake_movement_loggged = false;
-      document.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
       document.addEventListener("mousemove", function (e) {
         if (e.movementX === undefined) {
           e.movementX = e.screenX - fake_movement_lastx;
@@ -213,19 +172,16 @@
           "  Movement: " + e.movementX + ", " + e.movementY +
           ", calls: " + documentMouseMoveCallCounter;
       });
-      locktarget1.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
       locktarget1.addEventListener("mousemove", function (e) {
         locktarget1.lastElementChild.innerHTML =
           "  Raw: " + e.screenX + ", " + e.screenY +
           "  Movement: " + e.movementX + ", " + e.movementY;
       });
-      locktarget2.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
       locktarget2.addEventListener("mousemove", function (e) {
         locktarget2.lastElementChild.innerHTML =
           "  Raw: " + e.screenX + ", " + e.screenY +
           "  Movement: " + e.movementX + ", " + e.movementY;
       });
-      document.addEventListener("mouseover", polyFillMouseEventMovementFromVenderPrefix);
       document.addEventListener("mouseover", function (e) {
         if (e.movementX === undefined) {
           fake_movement_lastx = e.screenX;
@@ -270,15 +226,7 @@
         displaytext.innerHTML = displaytext.innerHTML + "  mousedown";
       });
 
-      var currentFSElement = document.fullscreenElement ||
-                             document.mozFullscreenElement ||
-                             document.oFullscreenElement ||
-                             document.msFullscreenElement ||
-                             document.fullScreenElement ||
-                             document.mozFullScreenElement ||
-                             document.oFullScreenElement ||
-                             document.msFullScreenElement;
-      console.log("document.fullscreenElement = " + currentFSElement);
+      console.log("document.fullscreenElement = " + document.fullscreenElement);
 
       // Color background when we are the iframe.
       if (window.top !== window)
