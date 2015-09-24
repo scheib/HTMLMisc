@@ -75,6 +75,15 @@
         pushStringToTopOfPreElement(document.pointerLockElement ? "locked" : "unlocked", stateOutput);
       });
 
+      document.addEventListener('pointerlockchange', function(e) {
+        eventCounter++;
+        pushStringToTopOfPreElement(Date.now()/1000, timeOutput);
+        pushStringToTopOfPreElement(eventCounter, counterOutput);
+        pushStringToTopOfPreElement(".", clientXOutput);
+        pushStringToTopOfPreElement(".", movementXOutput);
+        pushStringToTopOfPreElement("change: " + (document.pointerLockElement ? "locked" : "unlocked"), stateOutput);
+      });
+
       document.getElementById('reqPointerLock').addEventListener('click', function() {
         document.body.requestPointerLock();
       });
