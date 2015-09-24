@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+  <body>
+    <p><a href="#" id="reqPointerLock">Request pointer lock</a></p>
+    <p>Press any key to <span id="pauseOutput">pause</span> output.</p>
+    <table>
+      <tr>
+        <td>
+          <pre>time in seconds,</pre>
+        </td>
+        <td align="right">
+          <pre>event#,</pre>
+        </td>
+        <td align="right">
+          <pre>clientX,</pre>
+        </td>
+        <td align="right">
+          <pre>movementX,</pre>
+        </td>
+        <td align="right">
+          <pre>stateChange</pre>
+        </td>
+      </tr>    
+      <tr>
+        <td>
+          <pre id="timeOutput"></pre>
+        </td>
+        <td align="right">
+          <pre id="counterOutput"></pre>
+        </td>
+        <td align="right">
+          <pre id="clientXOutput"></pre>
+        </td>
+        <td align="right">
+          <pre id="movementXOutput"></pre>
+        </td>
+        <td align="right">
+          <pre id="stateOutput"></pre>
+        </td>
+      </tr>    
+    </table>
+    <script>
+      "use strict";
+      let maxLogSize = 200;
+      let outputEnabled = true;
+      let eventCounter = 0;
+      
+      // Init the size of page so that scroll bars do not adjust.
+      let preElements = document.getElementsByTagName("pre");
+      for (let i = 0; i < preElements.length; i++) {
+        if (!preElements[i].innerText) 
+          preElements[i].innerText = ".\n".repeat(maxLogSize);
+      }
+
+      function pushStringToTopOfPreElement(value, element) {        
+        if (!outputEnabled)
+          return;
+        let a = element.innerText.split("\n"); 
+        a.unshift(value);
+        a = a.slice(0, maxLogSize);
+        element.innerText = a.join("\n");      
+      }
+      
+      document.addEventListener('keydown', function() {
+        outputEnabled = !outputEnabled;
+        pauseOutput.innerText = outputEnabled ? "pause" : "unpause"; d
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        eventCounter++;
+        pushStringToTopOfPreElement(Date.now()/1000, timeOutput);
+        pushStringToTopOfPreElement(eventCounter, counterOutput);
+        pushStringToTopOfPreElement(e.clientX, clientXOutput);
+        pushStringToTopOfPreElement(e.movementX, movementXOutput);
+        pushStringToTopOfPreElement(document.pointerLockElement ? "locked" : "unlocked", stateOutput);
+      });
+
+      document.getElementById('reqPointerLock').addEventListener('click', function() {
+        document.body.requestPointerLock();
+      });
+    </script>
+  </body>
+</html>
