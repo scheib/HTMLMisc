@@ -1,9 +1,10 @@
 Miscellaneous HTML test pages.
 
-Hosted pages prefixed with http://scheib.github.com/HTMLMisc/
+Hosted pages prefixed with https://scheib.github.com/HTMLMisc/
 
 E.g.
-http://scheib.github.com/HTMLMisc/KeyboardSendsClicks.html
-http://scheib.github.com/HTMLMisc/KeyboardState.html
-http://scheib.github.com/HTMLMisc/PointerLockAndFullscreen.html
-http://scheib.github.com/HTMLMisc/PointerLockAndFullscreen-NoPrefix.html
+https://scheib.github.com/HTMLMisc/KeyboardSendsClicks.html
+https://scheib.github.com/HTMLMisc/KeyboardState.html
+https://scheib.github.com/HTMLMisc/PointerLockAndFullscreen.html
+https://scheib.github.com/HTMLMisc/PointerLockAndFullscreen-NoPrefix.html
+https://scheib.github.io/HTMLMisc/PointerLockLog.html
