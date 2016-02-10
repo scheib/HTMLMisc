@@ -13,7 +13,7 @@
     } else {
       document.body.innerHTML =
         "Web Bluetooth <strong>not available</strong> via navigator.bluetooth." +
-        "<p><button onclick="requestDevice()">Click to attempt a device request.</button>";
+        "<p><button onclick='requestDevice()'>Click to attempt a device request.</button>";
     }
     function requestDevice() {
       navigator.bluetooth.requestDevice(
