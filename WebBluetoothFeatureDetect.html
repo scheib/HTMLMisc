@@ -21,13 +21,11 @@
           filters: [{services: ['device_information']}]
         }).then(requestDeviceSuccess, requestDeviceFailure);
     }
-    function requestDeviceSuccess()
-    {
+    function requestDeviceSuccess() {
       document.body.innerHTML += "<p>requestDevice succeeded.";
     }
-    function requestDeviceFailure(error)
-    {
-      document.body.innerHTML += "<p>" + error.message);
+    function requestDeviceFailure(error) {
+      document.body.innerHTML += "<p>" + error.message;
     }
   </script>
   </body>
