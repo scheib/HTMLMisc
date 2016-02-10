@@ -18,7 +18,7 @@
     function requestDevice() {
       navigator.bluetooth.requestDevice(
         {
-          filters: [{services: ['device_information']}]
+          filters: [{services: ['device_information_test_bad']}]
         }).then(requestDeviceSuccess, requestDeviceFailure);
     }
     function requestDeviceSuccess() {
