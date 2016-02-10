@@ -1,16 +1,19 @@
 <!doctype html>
 <html>
-<body>
-  Web Bluetooth will be feature detected using script.
-<script>
-  "use strict";
-  if (navigator.bluetooth) {
-    document.body.innerHTML =
-      "Web Bluetooth appears <em>available</em> via navigator.bluetooth.";
-  } else {
-    document.body.innerText =
-      "Web Bluetooth <em>not available</em> via navigator.bluetooth.";
-  }
-</script>
-</body>
+  <head>
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    Web Bluetooth will be feature detected using script.
+  <script>
+    "use strict";
+    if (navigator.bluetooth) {
+      document.body.innerHTML =
+        "Web Bluetooth appears <strong>available</strong> via navigator.bluetooth.";
+    } else {
+      document.body.innerText =
+        "Web Bluetooth <strong>not available</strong> via navigator.bluetooth.";
+    }
+  </script>
+  </body>
 </html>
