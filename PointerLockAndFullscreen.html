@@ -65,10 +65,12 @@
     function RequestFullscreen(element) {
         console.log("requestFullscreen()")
         var requestFullscreen = element.requestFullscreen ||
+                                element.webkitRequestFullscreen ||
                                 element.mozRequestFullscreen ||
                                 element.oRequestFullscreen ||
                                 element.msRequestFullscreen ||
                                 element.requestFullScreen ||
+                                element.webkitRequestFullScreen ||
                                 element.mozRequestFullScreen ||
                                 element.oRequestFullScreen ||
                                 element.msRequestFullScreen;
@@ -77,10 +79,12 @@
     function ExitFullscreen() {
         console.log("exitFullscreen()")
         var exitFullscreen = document.exitFullscreen ||
+                             document.webkitExitFullscreen ||
                              document.mozExitFullscreen ||
                              document.oExitFullscreen ||
                              document.msExitFullscreen ||
                              document.cancelFullScreen ||
+                             document.webkitCancelFullScreen ||
                              document.mozCancelFullScreen ||
                              document.oCancelFullScreen ||
                              document.msCancelFullScreen;
@@ -88,10 +92,12 @@
     }
     function ToggleFullscreen(element) {
       var currentFSElement = document.fullscreenElement ||
+                             document.webkitFullscreenElement ||
                              document.mozFullscreenElement ||
                              document.oFullscreenElement ||
                              document.msFullscreenElement ||
                              document.fullScreenElement ||
+                             document.webkitFullScreenElement ||
                              document.mozFullScreenElement ||
                              document.oFullScreenElement ||
                              document.msFullScreenElement;
