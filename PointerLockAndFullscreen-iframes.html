@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html><head>
+  <style type="text/css">
+    #container {
+        border: solid black 1px;
+        background: white;
+
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+    }
+    #container > iframe {
+        margin: 10px;
+        flex-grow: 1
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <div><strong>https</strong>://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html:</div>
+    <iframe src="https://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html" allowfullscreen webkitallowfullscreen></iframe>
+    <div>http://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html:</div>
+    <iframe src="http://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html" allowfullscreen webkitallowfullscreen></iframe>
+    <div>https://rawgit.com/scheib/HTMLMisc/gh-pages/PointerLockAndFullscreen.html:</div>
+    <iframe src="https://rawgit.com/scheib/HTMLMisc/gh-pages/PointerLockAndFullscreen.html" allowfullscreen webkitallowfullscreen></iframe>
+  </div>
+</body>
+</html>
