@@ -8,6 +8,20 @@
     #container {
         border: solid black 1px;
         background: white;
+
+        position: absolute;
+        top: 10px;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+    }
+    #container > iframe {
+        margin: 10px;
+        flex-grow: 1
     }
     #clicktarget {
         border: solid black 1px;
@@ -17,14 +31,13 @@
         border: solid black 1px;
         background: yellow;
         display: inline;
-        position: absolute;
+        position: fixed;
         pointer-events: none;
         z-index: 1;
     }
     #resetPos {
         border: solid black 1px;
         background: pink;
-        display: inline;
         position: relative;
     }
     .locktarget {
@@ -37,24 +50,25 @@
     #locktarget2 {
         border: solid green 1px;
     }
+    #logoutput {
+      height: 150px;
+      overflow: auto;
+    }
   </style>
 
   <script type="text/javascript">
     documentMouseMoveCallCounter = 0;
     document.exitPointerLock = document.exitPointerLock ||
-                               document.webkitExitPointerLock ||
                                document.mozExitPointerLock ||
                                document.oExitPointerLock ||
                                document.msExitPointerLock;
     function RequestFullscreen(element) {
         console.log("requestFullscreen()")
         var requestFullscreen = element.requestFullscreen ||
-                                element.webkitRequestFullscreen ||
                                 element.mozRequestFullscreen ||
                                 element.oRequestFullscreen ||
                                 element.msRequestFullscreen ||
                                 element.requestFullScreen ||
-                                element.webkitRequestFullScreen ||
                                 element.mozRequestFullScreen ||
                                 element.oRequestFullScreen ||
                                 element.msRequestFullScreen;
@@ -63,12 +77,10 @@
     function ExitFullscreen() {
         console.log("exitFullscreen()")
         var exitFullscreen = document.exitFullscreen ||
-                             document.webkitExitFullscreen ||
                              document.mozExitFullscreen ||
                              document.oExitFullscreen ||
                              document.msExitFullscreen ||
                              document.cancelFullScreen ||
-                             document.webkitCancelFullScreen ||
                              document.mozCancelFullScreen ||
                              document.oCancelFullScreen ||
                              document.msCancelFullScreen;
@@ -76,12 +88,10 @@
     }
     function ToggleFullscreen(element) {
       var currentFSElement = document.fullscreenElement ||
-                             document.webkitFullscreenElement ||
                              document.mozFullscreenElement ||
                              document.oFullscreenElement ||
                              document.msFullscreenElement ||
                              document.fullScreenElement ||
-                             document.webkitFullScreenElement ||
                              document.mozFullScreenElement ||
                              document.oFullScreenElement ||
                              document.msFullScreenElement;
@@ -97,7 +107,6 @@
     function LockMouse(element) {
       log("Trying a lock to " + element.id + "...");
       element.requestPointerLock = element.requestPointerLock ||
-                                   element.webkitRequestPointerLock ||
                                    element.mozRequestPointerLock ||
                                    element.oRequestPointerLock ||
                                    element.msRequestPointerLock;
@@ -106,7 +115,6 @@
     }
     function ToggleMouseLock(element) {
       if (document.pointerLockElement ||
-          document.webkitPointerLockElement ||
           document.mozPointerLockElement ||
           document.oPointerLockElement ||
           document.msPointerLockElement) {
@@ -126,44 +134,43 @@
 
     function log(x) {
       logoutput.insertAdjacentHTML("beforeEnd", "<div>" + x + "</div>");
+      logoutput.scrollTop = logoutput.scrollHeight - logoutput.clientHeight;
     }
 
     var polyFillMouseEventMovementFromVenderPrefix = function (e) {
       e.movementX = (e.movementX !== undefined ? e.movementX :
-                    (e.webkitMovementX !== undefined ? e.webkitMovementX :
                     (e.mozMovementX !== undefined ? e.mozMovementX :
                     (e.oMovementX !== undefined ? e.oMovementX :
                      e.msMovementY))));
       e.movementY = (e.movementY !== undefined ? e.movementY :
-                    (e.webkitMovementY !== undefined ? e.webkitMovementY :
                     (e.mozMovementY !== undefined ? e.mozMovementY :
                     (e.oMovementY !== undefined ? e.oMovementY :
                      e.msMovementY))));
     }
 
     function init() {
-      requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+      requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame;
 
-      document.onwebkitpointerlockchange = function () {
-        log("document.onwebkitpointerlockchange to " +
-          (document.webkitPointerLockElement ? "locked" : "unlocked") +
-          ((document.webkitPointerLockElement == locktarget1) ? " to target 1" : "") +
-          ((document.webkitPointerLockElement == locktarget2) ? " to target 2" : ""));
+      document.onpointerlockchange = function () {
+        log("document.onpointerlockchange to " +
+          (document.pointerLockElement ? "locked" : "unlocked") +
+          ((document.pointerLockElement == locktarget1) ? " to target 1" : "") +
+          ((document.pointerLockElement == locktarget2) ? " to target 2" : ""));
       }
-      document.onwebkitpointerlockerror = function () {
-        log("document.onwebkitpointerlockerror. Current element: " +
-          (document.webkitPointerLockElement ? "locked" : "unlocked") +
-          ((document.webkitPointerLockElement == locktarget1) ? " to target 1" : "") +
-          ((document.webkitPointerLockElement == locktarget2) ? " to target 2" : ""));
+      document.onpointerlockerror = function () {
+        log("document.onpointerlockerror. Current element: " +
+          (document.pointerLockElement ? "locked" : "unlocked") +
+          ((document.pointerLockElement == locktarget1) ? " to target 1" : "") +
+          ((document.pointerLockElement == locktarget2) ? " to target 2" : ""));
       }
 
       function updateIsLocked () {
-        var locked = document.webkitPointerLockElement;
+        var locked = document.pointerLockElement;
         if (document.getElementById("isLocked").lastLocked != locked) {
-          document.getElementById("isLocked").innerHTML = "document.webkitPointerLockElement " +
-            (document.webkitPointerLockElement ? "locked" : "unlocked") +
-            (document.webkitPointerLockElement == locktarget1 ? " to target 1" : "") +
-            (document.webkitPointerLockElement == locktarget2 ? " to target 2" : "");
+          document.getElementById("isLocked").innerHTML = "document.pointerLockElement " +
+            (document.pointerLockElement ? "locked" : "unlocked") +
+            (document.pointerLockElement == locktarget1 ? " to target 1" : "") +
+            (document.pointerLockElement == locktarget2 ? " to target 2" : "");
           document.getElementById("isLocked").lastLocked = locked;
         }
         requestAnimationFrame(updateIsLocked);
@@ -311,15 +318,17 @@
 
 <body onload="init()" title="This tooltip should not be shown if the mouse is locked.">
   <div id="container">
-    <button onclick="ToggleFullscreen(document.getElementById('container'));">Toggle Tab Fullscreen</button>
-    <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
-    <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
-    <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
-    <button onclick="document.exitPointerLock();">Unlock Pointer</button>
-    <button onclick="console.log(document.webkitPointerLockElement);">document.webkitPointerLockElement</button>
-    <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Pointer</button>
-    <button onclick="RequestFullscreen(document.getElementById('container')); ExitFullscreen();">Request+Exit Fullscreen</button>
-    <button onclick="ExitFullscreen(); RequestFullscreen(document.getElementById('container')); ">Exit+Request Fullscreen</button>
+    <div>
+      <button onclick="ToggleFullscreen(document.getElementById('container'));">Toggle Tab Fullscreen</button>
+      <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
+      <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
+      <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
+      <button onclick="document.exitPointerLock();">Unlock Pointer</button>
+      <button onclick="console.log(document.pointerLockElement);">document.pointerLockElement</button>
+      <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Pointer</button>
+      <button onclick="RequestFullscreen(document.getElementById('container')); ExitFullscreen();">Request+Exit Fullscreen</button>
+      <button onclick="ExitFullscreen(); RequestFullscreen(document.getElementById('container')); ">Exit+Request Fullscreen</button>
+    </div>
     <form name="displaytext">...<br>...</form>
     <div id="locktarget1" class="locktarget">
       Target 1
@@ -339,24 +348,32 @@
       <div>Lock Target Movement:</div>
       <div>...</div>
     </div><br>
-    <div id="isLocked">...</div>
-    <div id="clicktarget">
-      click here!<br>
-      dblclick here!
-    </div><br>
-    <div id="HTMLCursor">HTMLCursor</div><br>
-    <div id="resetPos">
-      Press a key, or Click here to reset HTMLCursor position.
-    </div><br>
-    <div>
-      <a href="#anchor">#anchor</a>
-      <a href="PointerLockAndFullscreen.html">PointerLockAndFullscreen.html</a>
-      <a href="http://scheib.net">scheib.net</a>
-      <button onclick="history.pushState(null, null, 'pushState')">history.pushState</button>
-    </div><br>
-    <form name="logoutput">Log:</form>
+    <table width="100%">
+      <tr>
+        <td width="50%">
+          <div id="isLocked">document.pointerLockElement unlocked</div>
+          <div id="clicktarget">
+            click here!<br>
+            dblclick here!
+          </div>
+          <div id="resetPos">
+            Press a key, or Click here to reset HTMLCursor position.
+          </div><br>
+          <div>
+            <a href="#anchor">#anchor</a>
+            <a href="PointerLockAndFullscreen.html">PointerLockAndFullscreen.html</a>
+            <a href="http://scheib.net">scheib.net</a>
+            <button onclick="history.pushState(null, null, 'pushState')">history.pushState</button>
+          </div><br>
+        </td>
+        <td width="50%">
+          <div id="logoutput">Log:</div>
+        </td>
+      </tr>
+    </table>
     <iframe src="PointerLockAndFullscreen.html" allowfullscreen webkitallowfullscreen></iframe>
   </div>
+  <div id="HTMLCursor">HTMLCursor</div><br>
 </body>
 </html>
 

@@ -8,6 +8,20 @@
     #container {
         border: solid black 1px;
         background: white;
+
+        position: absolute;
+        top: 10px;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+    }
+    #container > iframe {
+        margin: 10px;
+        flex-grow: 1
     }
     #clicktarget {
         border: solid black 1px;
@@ -17,14 +31,13 @@
         border: solid black 1px;
         background: yellow;
         display: inline;
-        position: absolute;
+        position: fixed;
         pointer-events: none;
         z-index: 1;
     }
     #resetPos {
         border: solid black 1px;
         background: pink;
-        display: inline;
         position: relative;
     }
     .locktarget {
@@ -36,6 +49,13 @@
     }
     #locktarget2 {
         border: solid green 1px;
+    }
+    #logoutput {
+      height: 150px;
+      overflow: auto;
+    }
+    td {
+      width: 50%;
     }
   </style>
 
@@ -81,6 +101,7 @@
 
     function log(x) {
       logoutput.insertAdjacentHTML("beforeEnd", "<div>" + x + "</div>");
+      logoutput.scrollTop = logoutput.scrollHeight - logoutput.clientHeight;
     }
 
     function init() {
@@ -237,15 +258,17 @@
 
 <body onload="init()" title="This tooltip should not be shown if the mouse is locked.">
   <div id="container">
-    <button onclick="ToggleFullscreen(document.getElementById('container'));">Toggle Tab Fullscreen</button>
-    <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
-    <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
-    <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
-    <button onclick="document.exitPointerLock();">Unlock Pointer</button>
-    <button onclick="console.log(document.pointerLockElement);">document.pointerLockElement</button>
-    <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Pointer</button>
-    <button onclick="RequestFullscreen(document.getElementById('container')); ExitFullscreen();">Request+Exit Fullscreen</button>
-    <button onclick="ExitFullscreen(); RequestFullscreen(document.getElementById('container')); ">Exit+Request Fullscreen</button>
+    <div>
+      <button onclick="ToggleFullscreen(document.getElementById('container'));">Toggle Tab Fullscreen</button>
+      <button onclick="DelayedFullscreen();">Delayed Fullscreen</button>
+      <button onclick="DelayedLockMouse1();">Delayed Lock Target1</button>
+      <button onclick="SpamLockMouse2();">Spam Lock Target2</button>
+      <button onclick="document.exitPointerLock();">Unlock Pointer</button>
+      <button onclick="console.log(document.pointerLockElement);">document.pointerLockElement</button>
+      <button onclick="ToggleFullscreen(document.getElementById('container')); LockMouse(locktarget1);">Toggle Fullscreen & Lock Pointer</button>
+      <button onclick="RequestFullscreen(document.getElementById('container')); ExitFullscreen();">Request+Exit Fullscreen</button>
+      <button onclick="ExitFullscreen(); RequestFullscreen(document.getElementById('container')); ">Exit+Request Fullscreen</button>
+    </div>
     <form name="displaytext">...<br>...</form>
     <div id="locktarget1" class="locktarget">
       Target 1
@@ -265,24 +288,32 @@
       <div>Lock Target Movement:</div>
       <div>...</div>
     </div><br>
-    <div id="isLocked">...</div>
-    <div id="clicktarget">
-      click here!<br>
-      dblclick here!
-    </div><br>
-    <div id="HTMLCursor">HTMLCursor</div><br>
-    <div id="resetPos">
-      Press a key, or Click here to reset HTMLCursor position.
-    </div><br>
-    <div>
-      <a href="#anchor">#anchor</a>
-      <a href="PointerLockAndFullscreen.html">PointerLockAndFullscreen.html</a>
-      <a href="http://scheib.net">scheib.net</a>
-      <button onclick="history.pushState(null, null, 'pushState')">history.pushState</button>
-    </div><br>
-    <form name="logoutput">Log:</form>
-    <iframe src="PointerLockAndFullscreen.html" allowfullscreen></iframe>
+    <table width="100%">
+      <tr>
+        <td width="50%">
+          <div id="isLocked">document.pointerLockElement unlocked</div>
+          <div id="clicktarget">
+            click here!<br>
+            dblclick here!
+          </div>
+          <div id="resetPos">
+            Press a key, or Click here to reset HTMLCursor position.
+          </div><br>
+          <div>
+            <a href="#anchor">#anchor</a>
+            <a href="PointerLockAndFullscreen-NoPrefix.html">PointerLockAndFullscreen-NoPrefix.html</a>
+            <a href="http://scheib.net">scheib.net</a>
+            <button onclick="history.pushState(null, null, 'pushState')">history.pushState</button>
+          </div><br>
+        </td>
+        <td width="50%">
+          <div id="logoutput">Log:</div>
+        </td>
+      </tr>
+    </table>
+    <iframe src="PointerLockAndFullscreen-NoPrefix.html" allowfullscreen></iframe>
   </div>
+  <div id="HTMLCursor">HTMLCursor</div><br>
 </body>
 </html>
 
