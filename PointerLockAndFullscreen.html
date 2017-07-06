@@ -139,9 +139,10 @@
       }
       moveHTMLCursorToCenter();
       function moveHTMLCursorBy(x, y) {
+        let zoom = window.devicePixelRatio;
         moveHTMLCursorTo(
-            HTMLCursor.getBoundingClientRect().left + parseInt(x),
-            HTMLCursor.getBoundingClientRect().top + parseInt(y));
+            HTMLCursor.getBoundingClientRect().left + parseInt(x) / zoom,
+            HTMLCursor.getBoundingClientRect().top + parseInt(y) / zoom);
       }
 
       document.addEventListener("click", function (e) { clickAndDblclickHander("click", e); } );
