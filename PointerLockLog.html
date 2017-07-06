@@ -2,7 +2,7 @@
 <html>
   <body>
     <p><a href="#" id="reqPointerLock">Request pointer lock</a></p>
-    <p>Press any key to <span id="pauseOutput">pause</span> output.</p>
+    <p>Press any key to <span id="pauseOutput">pause</span> output, and reset movementXSum.</p>
     <table>
       <tr>
         <td>
@@ -16,6 +16,9 @@
         </td>
         <td align="right">
           <pre>movementX,</pre>
+        </td>
+        <td align="right">
+          <pre>movementXSum,</pre>
         </td>
         <td align="right">
           <pre>stateChange</pre>
@@ -35,6 +38,9 @@
           <pre id="movementXOutput"></pre>
         </td>
         <td align="right">
+          <pre id="movementXSumOutput"></pre>
+        </td>
+        <td align="right">
           <pre id="stateOutput"></pre>
         </td>
       </tr>    
@@ -44,6 +50,7 @@
       let maxLogSize = 200;
       let outputEnabled = true;
       let eventCounter = 0;
+      let movementXSum = 0;
       
       // Init the size of page so that scroll bars do not adjust.
       let preElements = document.getElementsByTagName("pre");
@@ -62,16 +69,19 @@
       }
       
       document.addEventListener('keydown', function() {
+        movementXSum = 0;
         outputEnabled = !outputEnabled;
         pauseOutput.innerText = outputEnabled ? "pause" : "unpause"; d
       });
 
       document.addEventListener('mousemove', function(e) {
         eventCounter++;
+        movementXSum += e.movementX;
         pushStringToTopOfPreElement(Date.now()/1000, timeOutput);
         pushStringToTopOfPreElement(eventCounter, counterOutput);
         pushStringToTopOfPreElement(e.clientX, clientXOutput);
         pushStringToTopOfPreElement(e.movementX, movementXOutput);
+        pushStringToTopOfPreElement(movementXSum, movementXSumOutput);
         pushStringToTopOfPreElement(document.pointerLockElement ? "locked" : "unlocked", stateOutput);
       });
 
@@ -81,6 +91,7 @@
         pushStringToTopOfPreElement(eventCounter, counterOutput);
         pushStringToTopOfPreElement(".", clientXOutput);
         pushStringToTopOfPreElement(".", movementXOutput);
+        pushStringToTopOfPreElement(movementXSum, movementXSumOutput);
         pushStringToTopOfPreElement("change: " + (document.pointerLockElement ? "locked" : "unlocked"), stateOutput);
       });
 
