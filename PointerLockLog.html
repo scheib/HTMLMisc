@@ -12,7 +12,7 @@
           <pre>event#,</pre>
         </td>
         <td align="right">
-          <pre>clientX,</pre>
+          <pre>screenX,</pre>
         </td>
         <td align="right">
           <pre>movementX,</pre>
@@ -32,7 +32,7 @@
           <pre id="counterOutput"></pre>
         </td>
         <td align="right">
-          <pre id="clientXOutput"></pre>
+          <pre id="screenXOutput"></pre>
         </td>
         <td align="right">
           <pre id="movementXOutput"></pre>
@@ -79,7 +79,7 @@
         movementXSum += e.movementX;
         pushStringToTopOfPreElement(Date.now()/1000, timeOutput);
         pushStringToTopOfPreElement(eventCounter, counterOutput);
-        pushStringToTopOfPreElement(e.clientX, clientXOutput);
+        pushStringToTopOfPreElement(e.screenX, screenXOutput);
         pushStringToTopOfPreElement(e.movementX, movementXOutput);
         pushStringToTopOfPreElement(movementXSum, movementXSumOutput);
         pushStringToTopOfPreElement(document.pointerLockElement ? "locked" : "unlocked", stateOutput);
@@ -89,7 +89,7 @@
         eventCounter++;
         pushStringToTopOfPreElement(Date.now()/1000, timeOutput);
         pushStringToTopOfPreElement(eventCounter, counterOutput);
-        pushStringToTopOfPreElement(".", clientXOutput);
+        pushStringToTopOfPreElement(".", screenXOutput);
         pushStringToTopOfPreElement(".", movementXOutput);
         pushStringToTopOfPreElement(movementXSum, movementXSumOutput);
         pushStringToTopOfPreElement("change: " + (document.pointerLockElement ? "locked" : "unlocked"), stateOutput);
