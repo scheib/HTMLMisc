@@ -220,21 +220,8 @@
           target.dispatchEvent(ee)
       };
 
-      var fake_movement_lastx = -1;
-      var fake_movement_lasty = -1;
-      var fake_movement_loggged = false;
       document.addEventListener("mousemove", polyFillMouseEventMovementFromVenderPrefix);
       document.addEventListener("mousemove", function (e) {
-        if (e.movementX === undefined) {
-          e.movementX = e.screenX - fake_movement_lastx;
-          e.movementY = e.screenY - fake_movement_lasty;
-          fake_movement_lastx = e.screenX;
-          fake_movement_lasty = e.screenY;
-          if (!fake_movement_loggged) {
-            fake_movement_loggged = true;
-            log("MouseEvent doesn't support .movementX/Y, faking it!");
-          }
-        }
         moveHTMLCursorBy(e.movementX, e.movementY);
         documentMouseMoveCallCounter++;
         displaytext.innerHTML =
@@ -257,13 +244,6 @@
         locktarget2.lastElementChild.innerHTML =
           "  Raw: " + e.screenX + ", " + e.screenY +
           "  Movement: " + e.movementX + ", " + e.movementY;
-      });
-      document.addEventListener("mouseover", polyFillMouseEventMovementFromVenderPrefix);
-      document.addEventListener("mouseover", function (e) {
-        if (e.movementX === undefined) {
-          fake_movement_lastx = e.screenX;
-          fake_movement_lasty = e.screenY;
-        }
       });
       document.addEventListener("keypress", function (e) {
         if (e.keyCode != 116) {
