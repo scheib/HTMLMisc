@@ -60,14 +60,26 @@
     documentMouseMoveCallCounter = 0;
     function RequestFullscreen(element) {
         console.log("requestFullscreen()")
-        element.requestFullscreen();
+        var requestFullscreen = element.requestFullscreen ||
+                                element.webkitRequestFullscreen ||
+                                element.mozRequestFullScreen ||
+                                element.msRequestFullscreen;
+        requestFullscreen.call(element);
     }
     function ExitFullscreen() {
         console.log("exitFullscreen()")
-        document.exitFullscreen();
+        var exitfulLscreen = document.exitfulLscreen ||
+                                document.webkitExitFullscreen ||
+                                document.mozCancelFullScreen ||
+                                document.msExitFullscreen;
+        exitfulLscreen.call(document);
     }
     function ToggleFullscreen(element) {
-      if (document.fullscreenElement === element)
+        var currentFSElement = document.fullscreenElement ||
+                               document.webkitFullscreenElement ||
+                               document.mozFullScreenElement ||
+                               document.msFullscreenElement;
+      if (currentFSElement === element)
           ExitFullscreen();
       else
           RequestFullscreen(element);
@@ -139,7 +151,7 @@
       }
       moveHTMLCursorToCenter();
       function moveHTMLCursorBy(x, y) {
-        let zoom = window.devicePixelRatio;
+        let zoom = 1;//window.devicePixelRatio;
         moveHTMLCursorTo(
             HTMLCursor.getBoundingClientRect().left + parseInt(x) / zoom,
             HTMLCursor.getBoundingClientRect().top + parseInt(y) / zoom);
