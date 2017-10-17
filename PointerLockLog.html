@@ -2,7 +2,11 @@
 <html>
   <body>
     <p><a href="#" id="reqPointerLock">Request pointer lock</a></p>
-    <p>Press any key to <span id="pauseOutput">pause</span> output, and reset movementXSum.</p>
+    <p>
+      <label><input id="outputPausedCheckbox" type="checkbox" disabled> Output Paused.</label>
+      Press any key to <span id="pauseOutput">pause</span> output, and reset movementXSum.
+    </p>
+    <p><label><input id="disableScrollCheckbox" type="checkbox"> Disable Scrolling</label></p>
     <table>
       <tr>
         <td>
@@ -72,6 +76,7 @@
         movementXSum = 0;
         outputEnabled = !outputEnabled;
         pauseOutput.innerText = outputEnabled ? "pause" : "unpause";
+        outputPausedCheckbox.checked = !outputEnabled;
       });
 
       document.addEventListener('mousemove', function(e) {
@@ -98,6 +103,10 @@
       document.getElementById('reqPointerLock').addEventListener('click', function() {
         document.body.requestPointerLock();
       });
+
+      disableScrollCheckbox.onchange = () => {
+        document.body.style.overflow = disableScrollCheckbox.checked ? "hidden" : "";
+      }
     </script>
   </body>
 </html>
