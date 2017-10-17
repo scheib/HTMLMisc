@@ -4,7 +4,7 @@
     <p><a href="#" id="reqPointerLock">Request pointer lock</a></p>
     <p>
       <label><input id="outputPausedCheckbox" type="checkbox" disabled> Output Paused.</label>
-      Press any key to <span id="pauseOutput">pause</span> output, and reset movementXSum.
+      Press any key to <span id="pauseOutput">pause</span> output, and reset movementXSum/movementYSum.
     </p>
     <p><label><input id="disableScrollCheckbox" type="checkbox"> Disable Scrolling</label></p>
     <table>
@@ -23,6 +23,15 @@
         </td>
         <td align="right">
           <pre>movementXSum,</pre>
+        </td>
+        <td align="right">
+          <pre>screenY,</pre>
+        </td>
+        <td align="right">
+          <pre>movementY,</pre>
+        </td>
+        <td align="right">
+          <pre>movementYSum,</pre>
         </td>
         <td align="right">
           <pre>stateChange</pre>
@@ -45,6 +54,15 @@
           <pre id="movementXSumOutput"></pre>
         </td>
         <td align="right">
+          <pre id="screenYOutput"></pre>
+        </td>
+        <td align="right">
+          <pre id="movementYOutput"></pre>
+        </td>
+        <td align="right">
+          <pre id="movementYSumOutput"></pre>
+        </td>
+        <td align="right">
           <pre id="stateOutput"></pre>
         </td>
       </tr>    
@@ -55,6 +73,7 @@
       let outputEnabled = true;
       let eventCounter = 0;
       let movementXSum = 0;
+      let movementYSum = 0;
       
       // Init the size of page so that scroll bars do not adjust.
       let preElements = document.getElementsByTagName("pre");
@@ -73,7 +92,7 @@
       }
       
       document.addEventListener('keydown', function() {
-        movementXSum = 0;
+        movementYSum = 0;
         outputEnabled = !outputEnabled;
         pauseOutput.innerText = outputEnabled ? "pause" : "unpause";
         outputPausedCheckbox.checked = !outputEnabled;
@@ -82,11 +101,15 @@
       document.addEventListener('mousemove', function(e) {
         eventCounter++;
         movementXSum += e.movementX;
+        movementYSum += e.movementY;
         pushStringToTopOfPreElement(Date.now()/1000, timeOutput);
         pushStringToTopOfPreElement(eventCounter, counterOutput);
         pushStringToTopOfPreElement(e.screenX, screenXOutput);
         pushStringToTopOfPreElement(e.movementX, movementXOutput);
         pushStringToTopOfPreElement(movementXSum, movementXSumOutput);
+        pushStringToTopOfPreElement(e.screenY, screenYOutput);
+        pushStringToTopOfPreElement(e.movementY, movementYOutput);
+        pushStringToTopOfPreElement(movementYSum, movementYSumOutput);
         pushStringToTopOfPreElement(document.pointerLockElement ? "locked" : "unlocked", stateOutput);
       });
 
@@ -97,6 +120,9 @@
         pushStringToTopOfPreElement(".", screenXOutput);
         pushStringToTopOfPreElement(".", movementXOutput);
         pushStringToTopOfPreElement(movementXSum, movementXSumOutput);
+        pushStringToTopOfPreElement(".", screenYOutput);
+        pushStringToTopOfPreElement(".", movementYOutput);
+        pushStringToTopOfPreElement(movementYSum, movementYSumOutput);
         pushStringToTopOfPreElement("change: " + (document.pointerLockElement ? "locked" : "unlocked"), stateOutput);
       });
 
