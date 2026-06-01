@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html><head>
-  <style type="text/css">
-    #container {
+<!doctype html>
+<html>
+  <head>
+    <style type="text/css">
+      #container {
         border: solid black 1px;
         background: white;
 
@@ -14,22 +15,81 @@
         display: flex;
         flex-direction: column;
         margin: 0;
-    }
-    #container > iframe {
+      }
+      #container > iframe {
         margin: 10px;
-        flex-grow: 1
-    }
-  </style>
-</head>
+        flex-grow: 1;
+      }
+    </style>
+    <script type="text/javascript">
+      function RequestFullscreen(element) {
+        console.log("requestFullscreen()");
+        var requestFullscreen =
+          element.requestFullscreen ||
+          element.webkitRequestFullscreen ||
+          element.mozRequestFullScreen ||
+          element.msRequestFullscreen;
+        requestFullscreen.call(element);
+      }
+      function ExitFullscreen() {
+        console.log("exitFullscreen()");
+        var exitFullscreen =
+          document.exitFullscreen ||
+          document.webkitExitFullscreen ||
+          document.mozCancelFullScreen ||
+          document.msExitFullscreen;
+        exitFullscreen.call(document);
+      }
+      function ToggleFullscreen(element) {
+        var currentFSElement =
+          document.fullscreenElement ||
+          document.webkitFullscreenElement ||
+          document.mozFullScreenElement ||
+          document.msFullscreenElement;
+        if (currentFSElement === element) ExitFullscreen();
+        else RequestFullscreen(element);
+      }
+    </script>
+  </head>
 
-<body>
-  <div id="container">
-    <div><strong>https</strong>://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html:</div>
-    <iframe src="https://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html" allowfullscreen webkitallowfullscreen></iframe>
-    <div>http://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html:</div>
-    <iframe src="http://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html" allowfullscreen webkitallowfullscreen></iframe>
-    <div>https://rawgit.com/scheib/HTMLMisc/gh-pages/PointerLockAndFullscreen.html:</div>
-    <iframe src="https://rawgit.com/scheib/HTMLMisc/gh-pages/PointerLockAndFullscreen.html" allowfullscreen webkitallowfullscreen></iframe>
-  </div>
-</body>
+  <body>
+    <div id="container">
+      <div>
+        Local PointerLockAndFullscreen.html:
+        <button onclick="ToggleFullscreen(document.getElementById('iframe0'));">
+          Toggle iframe Fullscreen
+        </button>
+      </div>
+      <iframe
+        id="iframe0"
+        src="PointerLockAndFullscreen.html"
+        allowfullscreen
+        webkitallowfullscreen
+      ></iframe>
+      <div>
+        <strong>https</strong>://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html:
+        <button onclick="ToggleFullscreen(document.getElementById('iframe1'));">
+          Toggle iframe Fullscreen
+        </button>
+      </div>
+      <iframe
+        id="iframe1"
+        src="https://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html"
+        allowfullscreen
+        webkitallowfullscreen
+      ></iframe>
+      <div>
+        http://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html:
+        <button onclick="ToggleFullscreen(document.getElementById('iframe2'));">
+          Toggle iframe Fullscreen
+        </button>
+      </div>
+      <iframe
+        id="iframe2"
+        src="http://scheib.github.io/HTMLMisc/PointerLockAndFullscreen.html"
+        allowfullscreen
+        webkitallowfullscreen
+      ></iframe>
+    </div>
+  </body>
 </html>
